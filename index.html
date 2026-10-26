@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IAD ChatBot – Mockup</title>
+<style>
+  :root{
+    --dark:#005064; --mid:#0F6982; --light:#437E97; --tint:#E3EEF2;
+    --gold:#FAAF00; --goldtint:#FEF3D6;
+    --text:#2C3747; --sub:#5A636D; --muted:#919BA5; --line:#DDE3E8;
+    --bg:#F6F8FA; --side:#EEF3F6; --white:#fff;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{font-family:"Source Sans Pro","Source Sans 3","Segoe UI",Arial,sans-serif;color:var(--text);background:var(--bg);font-size:15px}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+  .app{display:flex;height:100vh;min-height:620px}
+
+  /* Seitenleiste */
+  aside{width:268px;flex:none;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:14px 12px}
+  .mandant{position:relative}
+  .mandant-btn{display:flex;align-items:center;gap:10px;width:100%;padding:8px 8px;border-radius:10px}
+  .mandant-btn:hover{background:#E2EAEF}
+  .logo{width:30px;height:30px;border-radius:8px;background:var(--dark);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px;letter-spacing:.5px}
+  .mandant-name{flex:1;text-align:left;line-height:1.1}
+  .mandant-name b{display:block;font-size:14px}
+  .mandant-name small{color:var(--sub);font-size:12px}
+  .menu-pop{display:none;position:absolute;top:50px;left:0;right:0;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,40,60,.12);padding:6px;z-index:5}
+  .menu-pop.open{display:block}
+  .menu-pop button{display:block;width:100%;text-align:left;padding:8px 10px;border-radius:7px;font-size:14px}
+  .menu-pop button:hover{background:var(--tint)}
+  .nav{margin-top:12px;display:flex;flex-direction:column;gap:2px}
+  .nav button{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:8px;font-size:14.5px;text-align:left}
+  .nav button:hover{background:#E2EAEF}
+  .ico{width:18px;height:18px;flex:none;stroke:var(--sub);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .sec{margin:16px 8px 6px;font-size:12px;color:var(--sub);text-transform:uppercase;letter-spacing:.06em}
+  .ebenen{display:flex;gap:4px;margin:0 4px 6px;flex-wrap:wrap}
+  .ebenen button{font-size:12.5px;padding:4px 9px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--sub)}
+  .ebenen button.on{background:var(--dark);border-color:var(--dark);color:#fff}
+  .assist{display:flex;flex-direction:column;gap:1px}
+  .assist button{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:8px;font-size:14px;text-align:left}
+  .assist button:hover{background:#E2EAEF}
+  .dot{width:22px;height:22px;border-radius:6px;background:var(--tint);color:var(--dark);display:grid;place-items:center;font-size:11px;font-weight:700;flex:none}
+  .hist button{display:block;width:100%;text-align:left;padding:5px 8px;border-radius:8px;font-size:14px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .hist button:hover{background:#E2EAEF}
+  .spacer{flex:1}
+  .user{display:flex;align-items:center;gap:9px;padding:8px;border-top:1px solid var(--line);margin-top:8px;font-size:14px}
+  .avatar{width:26px;height:26px;border-radius:50%;background:var(--light);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700}
+
+  /* Hauptbereich */
+  main{flex:1;display:flex;flex-direction:column;min-width:0}
+  .top{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid transparent}
+  .top .crumb{font-size:14px;color:var(--sub)}
+  .badge{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--dark);background:var(--tint);padding:4px 10px;border-radius:999px}
+  .center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 24px 40px}
+  .hello{font-size:30px;font-weight:600;color:var(--text);margin:14px 0 22px;text-align:center}
+  .composer{width:min(700px,100%);background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 2px 10px rgba(0,40,60,.06)}
+  .composer textarea{width:100%;border:0;resize:none;outline:none;padding:16px 18px 6px;font:inherit;font-size:15.5px;color:var(--text);height:58px;background:transparent}
+  .bar{display:flex;align-items:center;gap:8px;padding:8px 10px 10px}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:5px 10px;border-radius:999px;border:1px solid var(--line);color:var(--sub)}
+  .pill.on{background:var(--tint);border-color:#BFD5DE;color:var(--dark)}
+  .round{width:32px;height:32px;border-radius:50%;display:grid;place-items:center}
+  .round:hover{background:var(--bg)}
+  .send{background:var(--dark)}
+  .send .ico{stroke:#fff}
+  .grow{flex:1}
+  .under{width:min(700px,100%);display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--sub);padding:8px 6px 0}
+  .src-on{display:inline-flex;align-items:center;gap:6px}
+  .src-on i{width:8px;height:8px;border-radius:50%;background:#3A9A6B;display:inline-block}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:22px;max-width:720px}
+  .chips button{display:inline-flex;align-items:center;gap:7px;font-size:14px;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:#fff}
+  .chips button:hover{border-color:var(--light);color:var(--dark)}
+  .chips .st{font-size:11px;color:var(--muted)}
+
+  /* Chat-Ansicht */
+  .chat{flex:1;overflow:auto;padding:10px 0 0}
+  .thread{width:min(760px,100% - 48px);margin:0 auto;display:flex;flex-direction:column;gap:18px}
+  .q{align-self:flex-end;max-width:80%;background:var(--tint);color:var(--text);padding:11px 15px;border-radius:16px 16px 4px 16px;font-size:15.5px}
+  .a{display:flex;gap:12px}
+  .a .logo{width:28px;height:28px;font-size:11px;flex:none}
+  .a-body{flex:1}
+  .ph{height:11px;border-radius:6px;background:#E3E8EC;margin:9px 0}
+  .ph.h{width:38%;height:13px;background:#D6DEE4}
+  .src{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .srcchip{display:inline-flex;align-items:center;gap:7px;font-size:13px;padding:6px 11px;border-radius:9px;background:var(--tint);color:var(--dark);border:1px solid #C9DCE4}
+  .actions{display:flex;gap:4px;margin-top:10px;align-items:center;color:var(--sub);font-size:13px}
+  .actions button{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border-radius:7px;font-size:13px;color:var(--sub)}
+  .actions button:hover{background:var(--side)}
+  .bottom{padding:12px 24px 10px;display:flex;flex-direction:column;align-items:center}
+  .hint{font-size:12.5px;color:var(--sub);margin-top:8px;text-align:center}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside>
+    <div class="mandant" data-callout="2">
+      <button class="mandant-btn" id="mandantBtn" aria-haspopup="true">
+        <span class="logo">IAD</span>
+        <span class="mandant-name"><b>IAD ChatBot</b><small id="mandantName">Albertinen Krankenhaus</small></span>
+        <svg class="ico" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5"/></svg>
+      </button>
+      <div class="menu-pop" id="mandantMenu">
+        <button>Albertinen Krankenhaus</button>
+        <button>Amalie Sieveking Krankenhaus</button>
+        <button>Immanuel Seniorenzentrum Elstal</button>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button id="newChat"><svg class="ico" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>Neuer Chat</button>
+      <button><svg class="ico" viewBox="0 0 24 24"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Dateien</button>
+      <button><svg class="ico" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 10h.01M15 10h.01M9 15c1.5 1 4.5 1 6 0"/></svg>Assistenten</button>
+      <button><svg class="ico" viewBox="0 0 24 24"><path d="M4 5a2 2 0 012-2h12v18H6a2 2 0 01-2-2z"/><path d="M8 7h6"/></svg>Prompts</button>
+      <button><svg class="ico" viewBox="0 0 24 24"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M12 11v5M9.5 13.5h5"/></svg>Projekte</button>
+    </nav>
+
+    <div data-callout="1">
+      <div class="sec">Assistenten und Prompts</div>
+      <div class="ebenen" id="ebenen">
+        <button class="on" data-e="iad">IAD</button>
+        <button data-e="pflege">Pflege</button>
+        <button data-e="abt">Meine Abteilung</button>
+        <button data-e="privat">Privat</button>
+      </div>
+      <div class="assist" id="assist"></div>
+    </div>
+
+    <div class="sec">Heute</div>
+    <div class="hist">
+      <button>Protokoll Teamsitzung</button>
+      <button>Anschreiben Kooperation</button>
+    </div>
+    <div class="sec">Letzte 7 Tage</div>
+    <div class="hist">
+      <button>Präsentation Qualitätszirkel</button>
+      <button>Merkblatt in Leichter Sprache</button>
+    </div>
+
+    <div class="spacer"></div>
+    <div class="user"><span class="avatar">AB</span>Anna Beispiel</div>
+  </aside>
+
+  <main>
+    <div class="top">
+      <span class="crumb" id="crumb"></span>
+      <span class="badge">Daten bleiben in Deutschland</span>
+    </div>
+
+    <!-- Ansicht 1: Startseite -->
+    <section class="center" id="home">
+      <span class="badge">IAD ChatBot</span>
+      <div class="hello">Guten Morgen! Wobei kann ich helfen?</div>
+      <div class="composer" data-callout="4">
+        <textarea placeholder="Frage stellen oder Datei hineinziehen …"></textarea>
+        <div class="bar">
+          <button class="round" title="Datei hochladen"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="pill on" id="webBtn"><svg class="ico" viewBox="0 0 24 24" style="width:15px;height:15px;stroke:currentColor"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg><span>Websuche an</span></button>
+          <span class="grow"></span>
+          <span class="pill">Standard (EU) ▾</span>
+          <button class="round" title="Spracheingabe"><svg class="ico" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg></button>
+          <button class="round send" title="Senden"><svg class="ico" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+        </div>
+      </div>
+      <div class="under">
+        <span class="src-on"><i></i>Hauswissen verbunden: IAD Wissen · roXtra</span>
+        <span>Stufe 0 und 1</span>
+      </div>
+      <div class="chips">
+        <button>Schreiben und Übersetzen</button>
+        <button>Zusammenfassen</button>
+        <button>Präsentation im IAD-Design</button>
+        <button>Recherche</button>
+        <button id="askHouse">Hauswissen fragen</button>
+        <button>Briefhilfe</button>
+      </div>
+    </section>
+
+    <!-- Ansicht 2: Chat -->
+    <section class="chat hidden" id="chat">
+      <div class="thread">
+        <div class="q">Wie gehen wir bei einem Norovirus-Ausbruch auf Station vor?</div>
+        <div class="a">
+          <span class="logo">IAD</span>
+          <div class="a-body">
+            <div class="ph h"></div>
+            <div class="ph" style="width:96%"></div>
+            <div class="ph" style="width:88%"></div>
+            <div class="ph" style="width:92%"></div>
+            <div class="ph h" style="width:30%;margin-top:18px"></div>
+            <div class="ph" style="width:84%"></div>
+            <div class="ph" style="width:90%"></div>
+            <div class="ph" style="width:62%"></div>
+            <div class="src" data-callout="3">
+              <span class="srcchip"><svg class="ico" viewBox="0 0 24 24" style="width:15px;height:15px;stroke:currentColor"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/></svg>Quelle: Hygieneplan Norovirus · roXtra · Version [x] · gültig ab [x]</span>
+            </div>
+            <div class="actions">
+              <button title="Hilfreich">👍</button>
+              <button title="Nicht hilfreich">👎</button>
+              <button>Falsch / veraltet melden</button>
+              <button>Kopieren</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="bottom hidden" id="chatBottom">
+      <div class="composer" data-callout="4">
+        <textarea placeholder="Nachfrage stellen …" style="height:46px"></textarea>
+        <div class="bar">
+          <button class="round"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="pill on" id="webBtn2"><svg class="ico" viewBox="0 0 24 24" style="width:15px;height:15px;stroke:currentColor"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg><span>Websuche an</span></button>
+          <span class="grow"></span>
+          <span class="pill">Standard (EU) ▾</span>
+          <button class="round"><svg class="ico" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg></button>
+          <button class="round send"><svg class="ico" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+        </div>
+      </div>
+      <div class="hint" data-callout="5">Sie arbeiten mit einem KI-System. Antworten vor der Verwendung prüfen.</div>
+    </div>
+  </main>
+</div>
+
+<script>
+  const ASSIST = {
+    iad:    [["P","IAD Präsentation"],["D","IAD Dokument"],["Ü","Übersetzen DE · EN · ES · PT"]],
+    pflege: [["S","Pflegestandards"],["F","Formulierungshilfe Pflegedoku"],["L","Leichte Sprache"]],
+    abt:    [["O","SOP-Assistent"],["B","Textbausteine Befunde"]],
+    privat: [["M","Meine Prompts"],["E","Eigener Assistent anlegen"]]
+  };
+  const assistEl = document.getElementById('assist');
+  function showEbene(e){
+    assistEl.innerHTML = ASSIST[e].map(([k,n]) => `<button><span class="dot">${k}</span>${n}</button>`).join('');
+    document.querySelectorAll('#ebenen button').forEach(b => b.classList.toggle('on', b.dataset.e === e));
+  }
+  document.querySelectorAll('#ebenen button').forEach(b => b.addEventListener('click', () => showEbene(b.dataset.e)));
+  showEbene('iad');
+
+  const mBtn = document.getElementById('mandantBtn'), mMenu = document.getElementById('mandantMenu');
+  mBtn.addEventListener('click', ev => { ev.stopPropagation(); mMenu.classList.toggle('open'); });
+  mMenu.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    document.getElementById('mandantName').textContent = b.textContent; mMenu.classList.remove('open');
+  }));
+  document.addEventListener('click', () => mMenu.classList.remove('open'));
+
+  function toggleWeb(btn){
+    const on = !btn.classList.contains('on');
+    document.querySelectorAll('#webBtn,#webBtn2').forEach(x => {
+      x.classList.toggle('on', on); x.querySelector('span').textContent = on ? 'Websuche an' : 'Websuche aus';
+    });
+  }
+  ['webBtn','webBtn2'].forEach(id => document.getElementById(id).addEventListener('click', e => toggleWeb(e.currentTarget)));
+
+  const home = document.getElementById('home'), chat = document.getElementById('chat'), bottom = document.getElementById('chatBottom'), crumb = document.getElementById('crumb');
+  function view(v){
+    const c = v === 'chat';
+    home.classList.toggle('hidden', c); chat.classList.toggle('hidden', !c); bottom.classList.toggle('hidden', !c);
+    crumb.textContent = c ? 'Hauswissen fragen' : '';
+  }
+  document.getElementById('askHouse').addEventListener('click', () => view('chat'));
+  document.getElementById('newChat').addEventListener('click', () => view('home'));
+  if (location.hash === '#chat') view('chat');
+</script>
+</body>
+</html>
